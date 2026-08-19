@@ -58,6 +58,14 @@ jobs:
           flatpak install --noninteractive org.freedesktop.Sdk.Extension.node24/x86_64/25.08
           flatpak install --noninteractive org.freedesktop.Sdk.Extension.rust-stable/x86_64/25.08
 
+      # Flatter only emits index.flatpakrepo, so build the per-app .flatpakref
+      # here from the same key the repository is signed with.
+      - name: Generate flatpakref
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          sed -e "s|@GPGKEY@|$(gpg --export "${{ steps.gpg.outputs.fingerprint }}" | base64 -w0)|" \
+            moe.kopuz.kopuz.flatpakref.in > moe.kopuz.kopuz.flatpakref
+
       - name: Build
         uses: andyholmes/flatter@main
         with:
@@ -70,6 +78,7 @@ jobs:
           upload-pages-includes: |
             default.css
             index.html
+            moe.kopuz.kopuz.flatpakref
 
   deploy:
     name: Deploy

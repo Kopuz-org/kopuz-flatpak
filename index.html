@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kopuz Flatpak Repository</title>
+<link rel="stylesheet" href="default.css">
+</head>
+<body>
+<main>
+  <h1>Kopuz</h1>
+  <p>A Flatpak repository for <a href="https://github.com/Kopuz-org">Kopuz</a>, built for
+  <code>x86_64</code> and <code>aarch64</code>.</p>
+
+  <h2>Install</h2>
+  <p>Install the application directly:</p>
+  <pre><code>flatpak install --user --or-update \
+    https://kopuz-org.github.io/kopuz-flatpak/moe.kopuz.kopuz.flatpakref</code></pre>
+
+  <h2>Add the repository</h2>
+  <p>Or add the remote and install from it:</p>
+  <pre><code>flatpak remote-add --user --if-not-exists kopuz \
+    https://kopuz-org.github.io/kopuz-flatpak/index.flatpakrepo
+flatpak install --user kopuz moe.kopuz.kopuz</code></pre>
+
+  <h2>Run</h2>
+  <pre><code>flatpak run moe.kopuz.kopuz</code></pre>
+
+  <footer>
+    <p>Builds are signed with GPG and published from
+    <a href="https://github.com/Kopuz-org/kopuz-flatpak">Kopuz-org/kopuz-flatpak</a>.</p>
+  </footer>
+</main>
+</body>
+</html>

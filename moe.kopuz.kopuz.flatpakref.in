@@ -1,0 +1,10 @@
+[Flatpak Ref]
+Title=Kopuz
+Name=moe.kopuz.kopuz
+Branch=master
+Url=https://kopuz-org.github.io/kopuz-flatpak
+Homepage=https://github.com/Kopuz-org/kopuz-flatpak
+IsRuntime=false
+GPGKey=@GPGKEY@
+RuntimeRepo=https://dl.flathub.org/repo/flathub.flatpakrepo
+SuggestRemoteName=kopuz
