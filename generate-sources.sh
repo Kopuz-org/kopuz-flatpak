@@ -19,16 +19,18 @@ WORKDIR="$(mktemp -d -t kopuz-flatpak-XXXXXX)"
 
 cd "$WORKDIR"
 
-if [[ -f "$CUR_DIR/Cargo.lock" ]]; then
-    REPO_DIR="$CUR_DIR"
-else
-    git clone https://github.com/Kopuz-org/kopuz.git
-    REPO_DIR="$WORKDIR/kopuz"
-fi
+# Vendor the exact release that Flatpak builds, even if upstream master has moved.
+MANIFEST="$DIST_DIR/moe.kopuz.kopuz.json"
+REPO_URL=$(jq -er '.modules[] | select(type == "object" and .name == "kopuz") | .sources[] | select(type == "object" and .type == "git") | .url' "$MANIFEST")
+REPO_COMMIT=$(jq -er '.modules[] | select(type == "object" and .name == "kopuz") | .sources[] | select(type == "object" and .type == "git") | .commit' "$MANIFEST")
+REPO_DIR="$WORKDIR/kopuz"
+git clone --no-checkout "$REPO_URL" "$REPO_DIR"
+git -C "$REPO_DIR" checkout --detach "$REPO_COMMIT"
 
 
 python -m venv venv
 
+# shellcheck source=/dev/null
 source ./venv/bin/activate
 
 pip install pipx
@@ -84,7 +86,7 @@ make_asset_source \
 "librusty.json"
 
 make_asset_source \
-"https://api.github.com/repos/DioxusLabs/dioxus/releases/tags/v$(grep -oPm1 'cargo install dioxus-cli@\K[0-9]+([\.\d]+)' $REPO_DIR/.github/workflows/release.yml)" \
+"https://api.github.com/repos/DioxusLabs/dioxus/releases/tags/v$(grep -oPm1 'cargo install dioxus-cli@\K[0-9]+([\.\d]+)' "$REPO_DIR/.github/workflows/release.yml")" \
 "dx-{@}-unknown-linux-gnu.zip" \
 "archive" \
 "dest" \

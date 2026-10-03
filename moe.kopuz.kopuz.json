@@ -53,7 +53,7 @@
         }
       },
       "build-commands": [
-        "dx build --release --package kopuz",
+        "dx build --release --package kopuz --locked",
         "install -Dm755 target/dx/kopuz/release/linux/app/kopuz $FLATPAK_DEST/bin/kopuz",
         "install -Dm644 data/$FLATPAK_ID.desktop $FLATPAK_DEST/share/applications/$FLATPAK_ID.desktop",
         "install -Dm644 data/$FLATPAK_ID.metainfo.xml $FLATPAK_DEST/share/metainfo/$FLATPAK_ID.metainfo.xml",
