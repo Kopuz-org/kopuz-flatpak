@@ -33,12 +33,6 @@ python -m venv venv
 # shellcheck source=/dev/null
 source ./venv/bin/activate
 
-pip install pipx
-
-pipx install git+https://github.com/flatpak/flatpak-builder-tools.git#subdirectory=node --force
-
-flatpak-node-generator npm "$REPO_DIR/package-lock.json" -o "npm-sources.json"
-
 pip install flatpak-cargo-generator
 
 flatpak-cargo-generator "$REPO_DIR/Cargo.lock" -o "cargo-sources.json"
@@ -85,20 +79,6 @@ make_asset_source \
 "librusty.a.gz" \
 "librusty.json"
 
-make_asset_source \
-"https://api.github.com/repos/DioxusLabs/dioxus/releases/tags/v$(grep -oPm1 'cargo install dioxus-cli@\K[0-9]+([\.\d]+)' "$REPO_DIR/.github/workflows/release.yml")" \
-"dx-{@}-unknown-linux-gnu.zip" \
-"archive" \
-"dest" \
-"dioxus-cli" \
-"dioxus-cli.json"
-
-
-
-cp "npm-sources.json" "$DIST_DIR/npm-sources.json"
-
 cp "cargo-sources.json" "$DIST_DIR/cargo-sources.json"
-
-cp "dioxus-cli.json" "$DIST_DIR/dioxus-cli.json"
 
 cp "librusty.json" "$DIST_DIR/librusty.json"

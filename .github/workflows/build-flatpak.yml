@@ -47,7 +47,6 @@ jobs:
         run: |
           flatpak install --noninteractive org.gnome.Sdk/aarch64/50
           flatpak install --noninteractive org.gnome.Platform/aarch64/50
-          flatpak install --noninteractive org.freedesktop.Sdk.Extension.node24/aarch64/25.08
           flatpak install --noninteractive org.freedesktop.Sdk.Extension.rust-stable/aarch64/25.08
 
       - name: Install runtimes (x86_64)
@@ -55,7 +54,6 @@ jobs:
         run: |
           flatpak install --noninteractive org.gnome.Sdk/x86_64/50
           flatpak install --noninteractive org.gnome.Platform/x86_64/50
-          flatpak install --noninteractive org.freedesktop.Sdk.Extension.node24/x86_64/25.08
           flatpak install --noninteractive org.freedesktop.Sdk.Extension.rust-stable/x86_64/25.08
 
       # Flatter only emits index.flatpakrepo, so build the per-app .flatpakref

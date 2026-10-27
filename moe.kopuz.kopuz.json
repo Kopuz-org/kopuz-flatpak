@@ -5,7 +5,6 @@
   "sdk": "org.gnome.Sdk",
   "command": "kopuz",
   "sdk-extensions": [
-    "org.freedesktop.Sdk.Extension.node24",
     "org.freedesktop.Sdk.Extension.rust-stable"
   ],
   "separate-locales": false,
@@ -19,46 +18,35 @@
     "--filesystem=xdg-music:ro",
     "--filesystem=xdg-download:ro",
     "--filesystem=xdg-run/discord-ipc-0",
-    "--filesystem=xdg-run/tray-icon:create",
     "--talk-name=org.freedesktop.Notifications",
     "--talk-name=org.mpris.MediaPlayer2.*",
     "--own-name=org.mpris.MediaPlayer2.kopuz",
-    "--talk-name=org.freedesktop.secrets",
-    "--talk-name=org.kde.StatusNotifierWatcher",
-    "--env=LD_LIBRARY_PATH=/app/lib"
+    "--talk-name=org.freedesktop.secrets"
   ],
   "build-options": {
     "strip": true,
-    "append-path": "/usr/lib/sdk/node24/bin:/usr/lib/sdk/rust-stable/bin"
+    "append-path": "/usr/lib/sdk/rust-stable/bin"
   },
   "modules": [
-    "flathub-submodules/libayatana-appindicator/libayatana-appindicator-gtk3.json",
-    "native-modules.json",
     {
       "name": "kopuz",
       "buildsystem": "simple",
       "build-options": {
         "strip": true,
-        "prepend-path": "/run/build/kopuz/dioxus-cli",
         "env": {
           "CARGO_HOME": "/run/build/kopuz/cargo",
           "CARGO_NET_OFFLINE": "true",
-          "NPM_CONFIG_LOGLEVEL": "info",
-          "XDG_CACHE_HOME": "/run/build/kopuz/flatpak-node/npm-cache",
-          "npm_config_nodedir": "/usr/lib/sdk/node24",
-          "npm_config_cache": "/run/build/kopuz/flatpak-node/npm-cache",
-          "npm_config_offline": "true",
           "RUSTY_V8_ARCHIVE": "/run/build/kopuz/librusty.a.gz",
-          "RUSTFLAGS": "-L native=/app/lib"
+          "SQLX_OFFLINE": "true"
         }
       },
       "build-commands": [
-        "dx build --release --package kopuz --locked",
-        "install -Dm755 target/dx/kopuz/release/linux/app/kopuz $FLATPAK_DEST/bin/kopuz",
+        "cargo build --release --offline --locked -p kopuz -p kopuz-kopuzd -p kopuz-ctl",
+        "install -Dm755 -t $FLATPAK_DEST/bin target/release/kopuz target/release/kopuzd target/release/kopuzctl",
         "install -Dm644 data/$FLATPAK_ID.desktop $FLATPAK_DEST/share/applications/$FLATPAK_ID.desktop",
         "install -Dm644 data/$FLATPAK_ID.metainfo.xml $FLATPAK_DEST/share/metainfo/$FLATPAK_ID.metainfo.xml",
-        "install -Dm644 crates/kopuz/assets/logo-512.png $FLATPAK_DEST/share/icons/hicolor/512x512/apps/$FLATPAK_ID.png",
-        "install -Dm644 crates/kopuz/assets/logo-128.png $FLATPAK_DEST/share/icons/hicolor/128x128/apps/$FLATPAK_ID.png"
+        "install -Dm644 apps/legacy/kopuz/assets/logo-512.png $FLATPAK_DEST/share/icons/hicolor/512x512/apps/$FLATPAK_ID.png",
+        "install -Dm644 apps/legacy/kopuz/assets/logo-128.png $FLATPAK_DEST/share/icons/hicolor/128x128/apps/$FLATPAK_ID.png"
       ],
       "sources": [
         {
@@ -72,10 +60,8 @@
             "tag-pattern": "^v(\\d+\\.\\d+\\.\\d+)$"
           }
         },
-        "dioxus-cli.json",
         "cargo-sources.json",
-        "librusty.json",
-        "npm-sources.json"
+        "librusty.json"
       ]
     }
   ]
